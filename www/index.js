@@ -1,8 +1,8 @@
 import { Universe, Cell } from "wasm-game-of-life"
 import { memory } from "wasm-game-of-life/wasm_game_of_life_bg"
 
-const CELL_SIZE = 8
-const GRID_COLOR = "#eee"
+const CELL_SIZE = 6
+const GRID_WIDTH = 2
 const DEAD_COLOR = "#fff"
 const ALIVE_COLOR = "#222"
 const TICK_INTERVAL_MS = 200
@@ -12,27 +12,10 @@ const width = universe.width()
 const height = universe.height()
 
 const canvas = document.getElementById("game-of-life-canvas")
-canvas.height = (CELL_SIZE + 1) * height + 1
-canvas.width = (CELL_SIZE + 1) * width + 1
+canvas.height = (CELL_SIZE + GRID_WIDTH) * height + GRID_WIDTH
+canvas.width = (CELL_SIZE + GRID_WIDTH) * width + GRID_WIDTH
 
 const ctx = canvas.getContext("2d")
-
-const drawGrid = () => {
-  ctx.beginPath()
-  ctx.strokeStyle = GRID_COLOR
-
-  for (let i = 0; i <= width; i++) {
-    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0)
-    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * height + 1)
-  }
-
-  for (let j = 0; j <= height; j++) {
-    ctx.moveTo(0, j * (CELL_SIZE + 1) + 1)
-    ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1)
-  }
-
-  ctx.stroke()
-}
 
 const getIndex = (row, column) => {
   return row * width + column
@@ -56,8 +39,8 @@ const drawCells = () => {
         : DEAD_COLOR
 
       ctx.fillRect(
-        col * (CELL_SIZE + 1) + 1,
-        row * (CELL_SIZE + 1) + 1,
+        col * (CELL_SIZE + GRID_WIDTH) + GRID_WIDTH,
+        row * (CELL_SIZE + GRID_WIDTH) + GRID_WIDTH,
         CELL_SIZE,
         CELL_SIZE,
       )
@@ -72,7 +55,6 @@ const renderLoop = () => {
   const now = Date.now()
   if (!lastTick || now > lastTick + TICK_INTERVAL_MS) {
     lastTick = now
-    drawGrid()
     drawCells()
     universe.tick()
   }
