@@ -65,14 +65,11 @@ impl Universe {
         self.cells = next;
     }
 
-    pub fn new() -> Universe {
-        let width = 128;
-        let height = 128;
-
+    pub fn new(width: u32, height: u32, density: f64) -> Universe {
         let mut cells = FixedBitSet::with_capacity((width * height) as usize);
 
         for i in 0..cells.len() {
-            cells.set(i, Math::random() < 0.5);
+            cells.set(i, Math::random() < density);
         }
 
         Universe {
